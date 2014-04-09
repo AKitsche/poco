@@ -13,11 +13,6 @@ powC(delta = 0.125, omega = 0.5, sigma = 1,
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-powC(delta = 0.125, omega = 0.5, na = 100, nb = 100, 
-     sigma = 1, alpha = 0.025, p = 0.1)
-}
-%- maybe also 'usage' for other objects documented here.
-\arguments{
   \item{delta}{
 overall treatment effect
 }
