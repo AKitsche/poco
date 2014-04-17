@@ -6,7 +6,7 @@ Date: 2014-03-04
 Author: Andreas Kitsche
 Maintainer: Andreas Kitsche <kitsche@biostat.uni-hannover.de>
 Description: This package summarizes the function presented in the article "R Functions for Sample Size and Probability Calculations for Assessing Consistency of Treatment Efects in Multi-Regional Clinical Trials" by Li et al. in the Journal of Statistical Software 
-Depends: mvtnorm
+Depends: mvtnorm, mratios, multcomp
 VignetteBuilder: knitr
 Suggests: knitr
 LazyLoad: yes
