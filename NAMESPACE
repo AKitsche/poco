@@ -1,1 +1,8 @@
-exportPattern("^[[:alpha:]]+")
+export(PowCon)
+exportClasses("Powerpoco")
+
+importFrom("mvtnorm", pmvt, qmvt)
+importFrom("multcomp", contrMat)
+importFrom("mratios", contrMatRatio)
+
+S3method(print, Powerpoco)
