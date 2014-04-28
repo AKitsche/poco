@@ -45,11 +45,20 @@ a single numeric value, familywise type I error to be controlled
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+PowCon return a list containing the following components:
+\item{power}{any pair power}
+\item{n}{number of samples per treatment-by-subgroup combination}
+\item{NonCentrPar}{Non-centrality parameter}
+\item{crit}{quantile from the multivariate t-distribution}
+\item{alternative}{direction of the alternative hypothesis}
+\item{CorrMat}{correlation matrix of the test statistics}
+\item{CMat}{Numeration interaction contrast matrix}
+\item{DMat}{Denominator interaction contrast matrix}
+\item{thetas}{inconsistency margin}
+\item{alpha}{global significance level}
+\item{n.sub}{number of levels of the subgrouping factor}
+\item{TreatMat}{type of contrast for the treatment factor}
+\item{SubMat}{type of contrast for the subgrouping factor}
 }
 \references{
 Kitsche, A., Hothorn, L.A. Testing for qualitative interaction using ratios of treatment differences. Statistics in Medicine 2014; 13(9):1477-1489.

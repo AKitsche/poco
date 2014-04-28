@@ -1,4 +1,4 @@
-export(PowCon)
+export(PowCon, nPowCon, thetaPowCon, alphaPowCon)
 exportClasses("Powerpoco")
 
 importFrom("mvtnorm", pmvt, qmvt)

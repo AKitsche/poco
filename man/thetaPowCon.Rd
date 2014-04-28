@@ -1,22 +1,24 @@
-\name{nPowCon}
-\alias{nPowCon}
-%- Also NEED an '\alias' for EACH other topic documented here.
+\name{thetaPowCon}
+\alias{thetaPowCon}
+
 \title{
-Function to calculate the sample size for multiple ratios of treatment differences
+Function to calculate the minimal detecable inconsistency margin for multiple ratios of treatment differences
 }
 \description{
-This function calculates the sample size associated with simltaneous tests for the ratios of treatment differences with a user defined inconsistency margin for the assessment of treatment-by-subgroup interactions. The required size n is determined iteratively by starting with a given sample size and search until the power condition is satisfied.
+This function calculates the minimal detecable inconsistency margin associated with simltaneous tests for the ratios of treatment differences for the assessment of treatment-by-subgroup interactions. The inconsistency margin is determined iteratively until the power condition is satisfied.
 }
 \usage{
-nPowCon(min.power, n.start=1, mu, sd, n.sub = 2, 
-        TreatMat = "Tukey", SubMat = "GrandMean", 
-        thetas = 1, alternative = c("two.sided", "less", "greater"), 
-        alpha = 0.05)
+thetaPowCon(power, n, mu, sd, n.sub = 2, 
+            TreatMat = "Tukey", SubMat = "GrandMean", 
+            alternative = c("two.sided", "less", "greater"), alpha = 0.05)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{min.power}{
+  \item{power}{
 any pair power
+}
+  \item{n}{
+a single numeric value, number samples per treatment-by-subgroup combination
 }
   \item{mu}{
 vector of cell means from the cell means model corresponding to a two-way layout
@@ -33,9 +35,6 @@ a single character string specifying the type of contrast for the treatment fact
   \item{SubMat}{
 a single character string specifying the type of contrast for the subgrouping factor; naming one of the contrast types available in contrMat(multcomp); if n.sub=1 the argument SubMat is ignored
 }
-  \item{thetas}{
-a single numeric value or a numeric vector of length, inconsistency margin(s)
-}
   \item{alternative}{
 a single character string, specifying the direction of the alternative hypothesis, one of "two.sided","less","greater"
 }
@@ -47,7 +46,7 @@ a single numeric value, familywise type I error to be controlled
 %%  ~~ If necessary, more details than the description above ~~
 }
 \value{
-nPowCon return a list containing the following components:
+thetaPowCon return a list containing the following components:
 \item{power}{any pair power}
 \item{n}{number of samples per treatment-by-subgroup combination}
 \item{NonCentrPar}{Non-centrality parameter}
@@ -79,26 +78,15 @@ Andreas Kitsche
 }
 \examples{
 #analysis of the consistency in a reproduced pivotal study
-nPowCon(min.power=0.8,
-        mu=c(10,15,10,14), 
-        sd=sqrt(5),
-        n.sub=2,
-        TreatMat= "Tukey", 
-        SubMat = "Tukey",
-        thetas=0.5, 
-        alpha=0.05, 
-        alternative="greater")
-       
-#analysis of treatment-by-subgroup interaction (e.g. in a multi-regional trial)
-nPowCon(min.power=0.9,
-       mu=c(10,15,10,15,10,15,10,15,10,11), 
+thetaPowCon(power=0.8,
+       mu=c(10,15,10,14), 
        sd=sqrt(5),
-       n.sub=5,
+       n = 30,
+       n.sub=2,
        TreatMat= "Tukey", 
-       SubMat = "GrandMean",
-       thetas=1, 
+       SubMat = "Tukey", 
        alpha=0.05, 
-       alternative="two.sided")
+       alternative="greater")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

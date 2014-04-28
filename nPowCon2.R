@@ -42,6 +42,7 @@ nPowCon <- function(min.power, mu, sd, n.sub=2, TreatMat = "Tukey", SubMat = "Gr
   class(out) <- "Powerpoco"
   out
 }
-
-
+  
+  
+  
 

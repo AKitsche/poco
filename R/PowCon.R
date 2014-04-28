@@ -31,9 +31,9 @@ PowCon <- function(mu, n, sd, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
   if(length(sd) != 1 || !is.numeric(sd)) {
     stop("sd must be a single numeric value")
   }
-  if(length(alpha) != 1 || !is.numeric(alpha) | alpha <= 0 | alpha >= 1) {
-    stop("alpha must be a single numeric value between 0 and 1")
-  }
+#  if(length(alpha) != 1 || !is.numeric(alpha) | alpha <= 0 | alpha >= 1) {
+#    stop("alpha must be a single numeric value between 0 and 1")
+#  }
   if(length(n.sub) != 1 || !is.numeric(n.sub) | is.integer(n.sub)) {
     stop("n.sub must be a single integer value specifying the number of subgroups")
   }
