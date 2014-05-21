@@ -1,20 +1,20 @@
-\name{PowCon}
-\alias{PowCon}
+\name{PowConBinom}
+\alias{PowConBinom}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Function to calculate any pair power for multiple ratios of treatment differences for gaussian distributed endpoint
+Function to calculate any pair power for multiple ratios of treatment differences for binomial distributed endpoint
 }
 \description{
 This function calculates the minimal power (any-pair power) associated with simltaneous tests for the ratios of treatment differences with a user defined inconsistency margin for the assessment of treatment-by-subgroup interactions.
 }
 \usage{
-PowCon(p, n, sd, n.treat = 2, TreatMat = "Tukey", SubMat = "GrandMean",
-       thetas = 1, alternative = c("two.sided", "less", "greater"), alpha = 0.05)
+PowConBinom(p, n, sd, n.treat = 2, TreatMat = "Tukey", SubMat = "GrandMean",
+       rhs = 1, alternative = c("two.sided", "less", "greater"), alpha = 0.05)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{mu}{
-vector of binomial proportions for each tretament-by-subgroup combination
+vector of cell means from the cell means model corresponding to a two-way layout
 }
   \item{n}{
 a single numeric value, number samples per treatment-by-subgroup combination
@@ -31,7 +31,7 @@ a single character string specifying the type of contrast for the treatment fact
   \item{SubMat}{
 a single character string specifying the type of contrast for the subgrouping factor; naming one of the contrast types available in contrMat(multcomp); if n.sub=1 the argument SubMat is ignored 
 }
-  \item{thetas}{
+  \item{rhs}{
 a single numeric value or a numeric vector of length,  inconsistency margin(s)
 }
   \item{alternative}{
@@ -54,14 +54,14 @@ PowCon return a list containing the following components:
 \item{CorrMat}{correlation matrix of the test statistics}
 \item{CMat}{Numeration interaction contrast matrix}
 \item{DMat}{Denominator interaction contrast matrix}
-\item{thetas}{inconsistency margin}
+\item{rhs}{inconsistency margin}
 \item{alpha}{global significance level}
 \item{n.sub}{number of levels of the subgrouping factor}
 \item{TreatMat}{type of contrast for the treatment factor}
 \item{SubMat}{type of contrast for the subgrouping factor}
 }
 \references{
-Kitsche, A., Hothorn, L.A. Testing for qualitative interaction using ratios of treatment differences. Statistics in Medicine 2014; 13(9):1477-1489.
+Kitsche, A. Detecting qualitative interactions in clinical trials with binary responses. Pharmaceutical Statistics, under revision.
 }
 \author{
 Andreas Kitsche
@@ -76,53 +76,8 @@ Andreas Kitsche
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-#according to Kitsche and Hothorn (2014) 
-#analyis of a multi-centre clinical trial
-PowCon(mu = c(10,8,10,12,10,12,10,12,10,12,10,12,10,12,10,12,10,12,10,12),
-       n=30,
-       sd=sqrt(5),
-       n.sub=10,
-       TreatMat="Tukey",
-       SubMat="GrandMean",
-       thetas=0,
-       alternative="less",
-       alpha=0.05)
-       
-#analysis of the consistency in a reproduced pivotal study
-PowCon(mu=c(10,15,10,14), 
-       sd=sqrt(5),
-       n = 30,
-       n.sub=2,
-       TreatMat= "Tukey", 
-       SubMat = "Tukey",
-       thetas=0.5, 
-       alpha=0.05, 
-       alternative="greater")
-       
-#analysis of treatment-by-subgroup interaction (e.g. in a multi-regional trial)
-PowCon(mu=c(10,15,10,15,10,15,10,15,10,11), 
-       sd=sqrt(5),
-       n = 10,
-       n.sub=5,
-       TreatMat= "Tukey", 
-       SubMat = "GrandMean",
-       thetas=1, 
-       alpha=0.05, 
-       alternative="two.sided")
-       
-#if n.sub=1 and TreatMat="Dunnett" the method corresponds to:
-#Dilba, G., Bretz, F., Hothorn, L.A., Guiard, V.
-#Power and sample size computations in simultaneous tests for non-inferiority based on relative margins,
-#Statistics in Medicine (2006); 25: 1131-1147
-PowCon(mu=c(10,9,9,11), 
-       sd=sqrt(5),
-       n = 10,
-       n.sub=1,
-       TreatMat= "Dunnett", 
-       SubMat = "Tukey",
-       thetas=0.8, 
-       alpha=0.05, 
-       alternative="greater")
+#Power calculation for consistency assessment of the 
+#Metoprolol Controlled-Release Randomized Intervention Trial in Heart Failure
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

@@ -1,4 +1,4 @@
-PowConBinom <- function(p, n, n.sub=3, TreatMat = "GrandMean", SubMat = "Tukey", rhs = 1, alternative = c("two.sided", "less", "greater"), alpha = 0.05){
+PowConBinom <- function(p, n, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean", rhs = 1, alternative = c("two.sided", "less", "greater"), alpha = 0.05){
   #checks
   if(length(n.sub) != 1 || !is.numeric(n.sub) | is.integer(n.sub)) {
     stop("n.sub must be a single integer value specifying the number of subgroups")

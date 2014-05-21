@@ -1,0 +1,25 @@
+"Country" "Treatment" "SampleSize" "Events"
+"1" "Belgium" "Meto CR/XL" 68 3
+"2" "Belgium" "Placebo" 66 13
+"3" "Czech Republic" "Meto CR/XL" 123 9
+"4" "Czech Republic" "Placebo" 124 17
+"5" "Denmark/Finland" "Meto CR/XL" 161 11
+"6" "Denmark/Finland" "Placebo" 164 13
+"7" "Germany" "Meto CR/XL" 252 19
+"8" "Germany" "Placebo" 247 31
+"9" "Hungary" "Meto CR/XL" 211 16
+"10" "Hungary" "Placebo" 212 29
+"11" "Iceland" "Meto CR/XL" 19 2
+"12" "Iceland" "Placebo" 22 2
+"13" "Norway" "Meto CR/XL" 97 6
+"14" "Norway" "Placebo" 105 11
+"15" "Poland" "Meto CR/XL" 102 8
+"16" "Poland" "Placebo" 102 8
+"17" "Sweden" "Meto CR/XL" 39 2
+"18" "Sweden" "Placebo" 46 9
+"19" "The Netherland/Switzerlnd" "Meto CR/XL" 299 14
+"20" "The Netherland/Switzerlnd" "Placebo" 291 26
+"21" "UK" "Meto CR/XL" 87 4
+"22" "UK" "Placebo" 83 9
+"23" "USA" "Meto CR/XL" 532 51
+"24" "USA" "Placebo" 539 49
