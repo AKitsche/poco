@@ -8,13 +8,13 @@ Function to calculate any pair power for multiple ratios of treatment difference
 This function calculates the minimal power (any-pair power) associated with simltaneous tests for the ratios of treatment differences with a user defined inconsistency margin for the assessment of treatment-by-subgroup interactions.
 }
 \usage{
-PowCon(p, n, sd, n.treat = 2, TreatMat = "Tukey", SubMat = "GrandMean",
+PowCon(mu, n, sd, n.treat = 2, TreatMat = "Tukey", SubMat = "GrandMean",
        thetas = 1, alternative = c("two.sided", "less", "greater"), alpha = 0.05)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{mu}{
-vector of binomial proportions for each tretament-by-subgroup combination
+vector of cell means from the cell means model corresponding to a two-way layout
 }
   \item{n}{
 a single numeric value, number samples per treatment-by-subgroup combination

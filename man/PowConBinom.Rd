@@ -14,10 +14,10 @@ PowConBinom(p, n, sd, n.treat = 2, TreatMat = "Tukey", SubMat = "GrandMean",
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{mu}{
-vector of cell means from the cell means model corresponding to a two-way layout
+vector of binomial proportions for each tretament-by-subgroup combination
 }
   \item{n}{
-a single numeric value, number samples per treatment-by-subgroup combination
+vector of sample sizes per treatment-by-subgroup combination
 }
   \item{sd}{
 a single numeric value, pooled standard deviation

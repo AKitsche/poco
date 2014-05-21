@@ -3,8 +3,8 @@ PowConBinom <- function(p, n, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
   if(length(n.sub) != 1 || !is.numeric(n.sub) | is.integer(n.sub)) {
     stop("n.sub must be a single integer value specifying the number of subgroups")
   }
-  if(length(n) != 1 || !(is.numeric(n) | is.integer(n))) {
-    stop("n must be a single integer value of the sample sizes per treatment-by-subgroup combination")
+  if(length(n) != length(p)) {
+    stop("n must be of the sample length as p, correponding to the sample size for each treatment-by-subgroup combination")
   }
   if(length(p) < 2 || !(is.numeric(p) | is.integer(p))) {
     stop("p must be a vector of expected proportions (at least length 2, containing integer values)")
@@ -13,12 +13,12 @@ PowConBinom <- function(p, n, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
   n.treat    <- length(p)/n.sub
   #Definition of numerator and denominator product type interaction contrast matrices for the M ratios 
   if(n.sub==1){
-    CMat <- contrMatRatio(n=rep(n, n.treat), type = TreatMat)$numC
-    DMat <- contrMatRatio(n=rep(n, n.treat), type = TreatMat)$denC
+    CMat <- contrMatRatio(n=n, type = TreatMat)$numC
+    DMat <- contrMatRatio(n=n, type = TreatMat)$denC
   }else{
-    C_Treat <- contrMat(n=rep(n, n.treat), type=TreatMat)#definition of the treatment effect as the user defined difference of treatment groups
-    C_Subgroup_Numerator   <- contrMatRatio(n=rep(n, n.subgroup), type = SubMat)$numC
-    C_Subgroup_Denominator <- contrMatRatio(n=rep(n, n.subgroup), type = SubMat)$denC
+    C_Treat <- contrMat(n=n, type=TreatMat)#definition of the treatment effect as the user defined difference of treatment groups
+    C_Subgroup_Numerator   <- contrMatRatio(n=n, type = SubMat)$numC
+    C_Subgroup_Denominator <- contrMatRatio(n=n, type = SubMat)$denC
     CMat <- kronecker(C_Subgroup_Numerator, C_Treat)#numerator interaction contrast matrix
     DMat <- kronecker(C_Subgroup_Denominator, C_Treat)#denominator interaction contrast matrix
   }
@@ -37,7 +37,7 @@ PowConBinom <- function(p, n, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
   #MM <- diag(1/rep(n, ncol(CMat)))# Diagonal matrix containing reciprocals of the ni's
   variances <- (p*(1-p))/n
   MM <- diag(variances)
-  nu <- (length(p))*(n-1)#degree of freedom
+  nu <- sum(n-1)#degree of freedom
   ncomp <- nrow(CMat)#Number of comparisons 
   #  Correlation matrix under H0
   CorrMat.H0 <- matrix(rep(NA,ncomp*ncomp),nrow=ncomp)
