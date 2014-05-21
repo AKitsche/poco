@@ -1,4 +1,4 @@
-export(PowCon, nPowCon, thetaPowCon, alphaPowCon, 
+export(PowCon, PowConBinom, nPowCon, thetaPowCon, alphaPowCon, 
 prob.def1, 
 prob.def2, 
 prob.def3,
