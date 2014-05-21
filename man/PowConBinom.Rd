@@ -79,6 +79,8 @@ Andreas Kitsche
 #Power calculation for consistency assessment of the 
 #Metoprolol Controlled-Release Randomized Intervention Trial in Heart Failure
 
+#generating the data set
+data(MetoCRXL2)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
