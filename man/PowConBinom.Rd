@@ -81,12 +81,12 @@ Andreas Kitsche
 
 #generating the data set
 data(MetoCRXL2)
-#library(MCPAN)
-#MCPAN_Est <- binomest(Success ~ RegionTreat,data=MetoCRXL2, success="1", method="Wald")
-#MCPAN_Est$estp
-#MCPAN_Est$n
+library(MCPAN)
+MCPAN_Est <- binomest(Success ~ RegionTreat,data=MetoCRXL2, success="1", method="Wald")
+MCPAN_Est$estp
+MCPAN_Est$n
 
-#PowConBinom(p=MCPAN_Est$estp, n=MCPAN_Est$n, n.sub = 12, TreatMat = "Tukey", SubMat = #"GrandMean",rhs = 0.5, alternative = "less", alpha = 0.05)
+PowConBinom(p=MCPAN_Est$estp, n=MCPAN_Est$n, n.sub = 12, TreatMat = "Tukey", SubMat = "GrandMean",rhs = 0.5, alternative = "less", alpha = 0.05)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

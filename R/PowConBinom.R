@@ -1,9 +1,3 @@
-MCPAN_Est <- binomest(Success ~ RegionTreat,data=MetoCRXL2, success="1", method="Wald")
-MCPAN_Est$estp
-MCPAN_Est$n
-PowConBinom(p=MCPAN_Est$estp, n=MCPAN_Est$n, n.sub = 12, TreatMat = "Tukey", SubMat = "GrandMean",
-            rhs = 0.5, alternative = "less", alpha = 0.05)
-
 PowConBinom <- function(p, n, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean", rhs = 1, alternative = c("two.sided", "less", "greater"), alpha = 0.05){
   #checks
   if(length(n.sub) != 1 || !is.numeric(n.sub) | is.integer(n.sub)) {
