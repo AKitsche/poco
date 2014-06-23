@@ -9,5 +9,5 @@ exportClasses("Powerpoco")
 importFrom("mvtnorm", pmvt, qmvt)
 importFrom("multcomp", contrMat)
 importFrom("mratios", contrMatRatio)
-
+importFrom("MCPAN", binomest)
 S3method(print, Powerpoco)
