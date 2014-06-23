@@ -8,7 +8,7 @@ Function to calculate any pair power for multiple ratios of treatment difference
 This function calculates the minimal power (any-pair power) associated with simltaneous tests for the ratios of treatment differences with a user defined inconsistency margin for the assessment of treatment-by-subgroup interactions.
 }
 \usage{
-PowCon(mu, n, sd, n.treat = 2, TreatMat = "Tukey", SubMat = "GrandMean",
+PowCon(mu, n, sd, n.sub = 2, TreatMat = "Tukey", SubMat = "GrandMean",
        thetas = 1, alternative = c("two.sided", "less", "greater"), alpha = 0.05)
 }
 %- maybe also 'usage' for other objects documented here.

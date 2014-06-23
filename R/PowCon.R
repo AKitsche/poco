@@ -37,7 +37,7 @@ PowCon <- function(mu, n, sd, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
   if(length(n.sub) != 1 || !is.numeric(n.sub) | is.integer(n.sub)) {
     stop("n.sub must be a single integer value specifying the number of subgroups")
   }
-  if(length(n) != 1 || !(is.numeric(n) | is.integer(n))) {
+  if(length(n) != length(p) & length(n) != 1) {
     stop("n must be a single integer value of the sample sizes per treatment-by-subgroup combination")
   }
   if(length(mu) < 2 || !(is.numeric(mu) | is.integer(mu))) {
@@ -45,6 +45,28 @@ PowCon <- function(mu, n, sd, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
   }
   n.subgroup <- n.sub
   n.treat    <- length(mu)/n.sub
+
+#determining the sample sizes 
+if(length(n)==1){
+  nTreat <- rep(n, n.treat)
+  nSub   <- rep(n, n.subgroup)
+}else{
+  nTreat <- vector(length=n.treat)#sample size for each treatment group
+  IteratorTreat <- seq(1,length(p), by=n.subgroup)
+  IteratorTreat <- c(IteratorTreat,length(p)+1)
+  for(i in 1:n.treat){
+    k <- IteratorTreat[i]
+    nTreat[i] <- sum(n[k:(IteratorTreat[i+1]-1)])
+  }
+  
+  nSub   <- vector(length=n.sub)#sample size for each subgroup
+  IteratorSub <- seq(1,length(p), by=n.treat)
+  IteratorSub <- c(IteratorSub, length(p)+1)
+  for(i in 1:n.subgroup){
+    k <- IteratorSub[i]
+    nSub[i] <- sum(n[k:(IteratorSub[i+1]-1)]) 
+  }    
+}
   #Definition of numerator and denominator product type interaction contrast matrices for the M ratios 
   if(n.sub==1){
     CMat <- contrMatRatio(n=rep(n, n.treat), type = TreatMat)$numC

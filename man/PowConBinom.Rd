@@ -8,7 +8,7 @@ Function to calculate any pair power for multiple ratios of treatment difference
 This function calculates the minimal power (any-pair power) associated with simltaneous tests for the ratios of treatment differences with a user defined inconsistency margin for the assessment of treatment-by-subgroup interactions.
 }
 \usage{
-PowConBinom(p, n, sd, n.treat = 2, TreatMat = "Tukey", SubMat = "GrandMean",
+PowConBinom(p, n, n.sub = 2, TreatMat = "Tukey", SubMat = "GrandMean",
        rhs = 1, alternative = c("two.sided", "less", "greater"), alpha = 0.05)
 }
 %- maybe also 'usage' for other objects documented here.
@@ -80,7 +80,13 @@ Andreas Kitsche
 #Metoprolol Controlled-Release Randomized Intervention Trial in Heart Failure
 
 #generating the data set
-data(MetoCRXL2)
+data(MetoCRXL)
+library(MCPAN)
+MCPAN_Est <- binomest(Success ~ RegionTreat,data=MetoCRXL2, success="1", method="Wald")
+MCPAN_Est$estp
+MCPAN_Est$n
+
+PowConBinom(p=MCPAN_Est$estp, n=MCPAN_Est$n, n.sub = 12, TreatMat = "Tukey", SubMat = "GrandMean",rhs = 0.5, alternative = "less", alpha = 0.05)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

@@ -1,9 +1,15 @@
+MCPAN_Est <- binomest(Success ~ RegionTreat,data=MetoCRXL2, success="1", method="Wald")
+MCPAN_Est$estp
+MCPAN_Est$n
+PowConBinom(p=MCPAN_Est$estp, n=MCPAN_Est$n, n.sub = 12, TreatMat = "Tukey", SubMat = "GrandMean",
+            rhs = 0.5, alternative = "less", alpha = 0.05)
+
 PowConBinom <- function(p, n, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean", rhs = 1, alternative = c("two.sided", "less", "greater"), alpha = 0.05){
   #checks
   if(length(n.sub) != 1 || !is.numeric(n.sub) | is.integer(n.sub)) {
     stop("n.sub must be a single integer value specifying the number of subgroups")
   }
-  if(length(n) != length(p)) {
+  if(length(n) != length(p) & length(n) != 1) {
     stop("n must be of the sample length as p, correponding to the sample size for each treatment-by-subgroup combination")
   }
   if(length(p) < 2 || !(is.numeric(p) | is.integer(p))) {
@@ -11,14 +17,38 @@ PowConBinom <- function(p, n, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
   }
   n.subgroup <- n.sub
   n.treat    <- length(p)/n.sub
+  
+  #determining the sample sizes 
+  if(length(n)==1){
+    nTreat <- rep(n, n.treat)
+    nSub   <- rep(n, n.subgroup)
+  }else{
+    nTreat <- vector(length=n.treat)#sample size for each treatment group
+    IteratorTreat <- seq(1,length(p), by=n.subgroup)
+    IteratorTreat <- c(IteratorTreat,length(p)+1)
+    for(i in 1:n.treat){
+      k <- IteratorTreat[i]
+      nTreat[i] <- sum(n[k:(IteratorTreat[i+1]-1)])
+    }
+    
+    nSub   <- vector(length=n.sub)#sample size for each subgroup
+    IteratorSub <- seq(1,length(p), by=n.treat)
+    IteratorSub <- c(IteratorSub, length(p)+1)
+    for(i in 1:n.subgroup){
+      k <- IteratorSub[i]
+      nSub[i] <- sum(n[k:(IteratorSub[i+1]-1)]) 
+    }    
+  }
+  
+  
   #Definition of numerator and denominator product type interaction contrast matrices for the M ratios 
   if(n.sub==1){
-    CMat <- contrMatRatio(n=n, type = TreatMat)$numC
-    DMat <- contrMatRatio(n=n, type = TreatMat)$denC
+    CMat <- contrMatRatio(n=nTreat, type = TreatMat)$numC
+    DMat <- contrMatRatio(n=nTreat, type = TreatMat)$denC
   }else{
-    C_Treat <- contrMat(n=n, type=TreatMat)#definition of the treatment effect as the user defined difference of treatment groups
-    C_Subgroup_Numerator   <- contrMatRatio(n=n, type = SubMat)$numC
-    C_Subgroup_Denominator <- contrMatRatio(n=n, type = SubMat)$denC
+    C_Treat <- contrMat(n=nTreat, type=TreatMat)#definition of the treatment effect as the user defined difference of treatment groups
+    C_Subgroup_Numerator   <- contrMatRatio(n=nSub, type = SubMat)$numC
+    C_Subgroup_Denominator <- contrMatRatio(n=nSub, type = SubMat)$denC
     CMat <- kronecker(C_Subgroup_Numerator, C_Treat)#numerator interaction contrast matrix
     DMat <- kronecker(C_Subgroup_Denominator, C_Treat)#denominator interaction contrast matrix
   }
