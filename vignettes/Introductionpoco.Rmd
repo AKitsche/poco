@@ -1,0 +1,14 @@
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Introduction to the poco package}
+-->
+
+# Introduction to dplyr
+
+When working with data you must:
+
+* Figure out what you want to do.
+
+* Precisely describe what you want in the form of a computer program.
+
+* Execute the code.

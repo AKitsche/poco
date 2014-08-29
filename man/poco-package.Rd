@@ -3,18 +3,18 @@
 \alias{poco}
 \docType{package}
 \title{
-Power and smaple size considerations for consistency assessment
+Power and smaple size calculations for consistency assessment
 }
 \description{
-Companion of functions for the design of multi-regional trials considering consitency assessment:
+In this package provides power and sample size calculations for the analysis of treatment-by-subgroup interactions for continuous and binary response variables:
 
-- calculate proportion of study patients for one region
+- calculate the power to detect an interaction effect (also qualitative interactions)
 
-- calculate proportion of Japanese patients
+- calculate sample size to detect an interaction effect (also qualitative interactions)
 
-- calculate power for concistency assessment
+- calculate power for consistency assessment
 
-- calculate smaple size for consistency assessment
+- calculate sample size for consistency assessment
 
 }
 \details{
@@ -22,7 +22,7 @@ Companion of functions for the design of multi-regional trials considering consi
 Package: \tab poco\cr
 Type: \tab Package\cr
 Version: \tab 1.0\cr
-Date: \tab 2014-03-04\cr
+Date: \tab 2014-08-28\cr
 License: \tab GPL\cr
 }
 }
@@ -30,30 +30,32 @@ License: \tab GPL\cr
 Andreas Kitsche <kitsche@biostat.uni-hannover.de>
 }
 \references{
-R Functions for Sample Size and Probability Calculations for Assessing Consistency of Treatment Effects in Multi-Regional Clinical Trials, Li, M., Quan, H. Chen, J., Tanaka, Y., Ouyang, P., Luo, X., Li, G. Journal of Statistical Software, 2012 (47)
+Kitsche A, Power and sample size computations for simultaneous consistency assessment of treatment effects [manuscript in preparation]
 
-Ikeda, K. ,Bretz, F. Sample size and proportion of Japanese patients in multi-regional trials
-Pharmaceutical Statistics 9: 207-216 (2010)
+Kitsche A, Hothorn LA. Testing for qualitative interaction using ratios of treatment differences. Statistics in Medicine (2014); 13(9):1477-1489
+
+Kitsche A. Detecting qualitative interactions in clinical trials with binary responses. Pharmaceutical statistics (2014); early view
 }
 
 \keyword{ package }
 \seealso{
 }
 \examples{
-####Specify the parameters. Default: 
-####alpha=0.025, beta=0.01, delta=0.005, 
-####sigma=0.013, u=c(1,1,1,1), pi=1/4, set.pow=0.8
-
-alpha <- 0.025
-beta <- 0.01
-delta <- 0.005
-sigma <- 0.013
-pi <- 1/4
-u <- rep(1, 4)
-set.pow <- 0.8  
-
-#For some higher powers, there may not be a solution, 
-#may need to increase total sample size
-
-f11.def1(alpha, beta, delta, sigma, u, pi, set.pow)
+data(MetoCRXL2)
+library(MCPAN)
+MCPAN_Est <- binomest(Success ~ RegionTreat,
+                      data=MetoCRXL2, 
+                      success="1", 
+                      method="Wald")
+MCPAN_Est$estp
+MCPAN_Est$n
+#power calculations
+PowConBinom(p=MCPAN_Est$estp, 
+            n=MCPAN_Est$n, 
+            n.sub = 12, 
+            TreatMat = "Tukey", 
+            SubMat = "GrandMean",
+            rhs = 0, 
+            alternative = "less", 
+            alpha = 0.05)
 }

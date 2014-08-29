@@ -16,7 +16,7 @@ nPowCon <- function(min.power, mu, sd, n.sub=2, TreatMat = "Tukey", SubMat = "Gr
            alpha=alpha, 
            alternative=alternative)[[1]]-min.power
   }
-  nfinal <- as.integer(uniroot(samplesize, lower=2, upper=1000)$root)
+  nfinal <- as.integer(uniroot(samplesize, lower=2, upper=10000)$root)
   Power <-    PowCon(mu=mu, 
                      sd=sd,
                      n = nfinal,

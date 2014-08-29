@@ -1,9 +1,4 @@
-export(PowCon, PowConBinom, nPowCon, thetaPowCon, alphaPowCon, 
-prob.def1, 
-prob.def2, 
-prob.def3,
-prob.def4,
-prob.def5)
+export(PowCon, PowConBinom, nPowCon,nPowConBinom, thetaPowCon, alphaPowCon)
 exportClasses("Powerpoco")
 
 importFrom("mvtnorm", pmvt, qmvt)
