@@ -1,0 +1,11 @@
+"Region" "Treatment" "SampleSize" "Events"
+"1" "Japan only" "Trastuzumab" 41 3
+"2" "Japan only" "Observation" 46 6
+"3" "Asia Pacific, Japan" "Trastuzumab" 202 12
+"4" "Asia Pacific, Japan" "Observation" 202 27
+"5" "Eastern Europe" "Trastuzumab" 189 10
+"6" "Eastern Europe" "Observation" 175 26
+"7" "Central and South America" "Trastuzumab" 94 7
+"8" "Central and South America" "Observation" 94 8
+"9" "Others" "Trastuzumab" 1208 98
+"10" "Others" "Observation" 1222 158
