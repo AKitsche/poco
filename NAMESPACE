@@ -1,7 +1,7 @@
 export(PowCon, PowConBinom, nPowCon,nPowConBinom, thetaPowCon, alphaPowCon)
 exportClasses("Powerpoco")
 
-importFrom("mvtnorm", pmvt, qmvt)
+importFrom("mvtnorm", pmvt, qmvt, rmvnorm)
 importFrom("multcomp", contrMat)
 importFrom("mratios", contrMatRatio)
 importFrom("MCPAN", binomest)
