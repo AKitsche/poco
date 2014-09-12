@@ -78,7 +78,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <div id="consistency-assessment-in-multi-regional-clinical-trials" class="section level1">
 <h1><span class="header-section-number">1</span> Consistency assessment in multi-regional clinical trials</h1>
 <p>The function <code>PowCon</code> calculates the minimal power (any-pair power) associated with simultaneous tests for the ratios of treatment differences with a user defined inconsistency margin for the assessment of treatment-by-subgroup interactions.</p>
-<pre class="r"><code>library(poco)
+<pre class="r"><code>#library(poco)
 PowCon(mu=c(10,15,10,15,10,15,10,15,10,11), 
        #vector of cell means from the cell 
        #mu = means model corresponding to a two-way layout
@@ -98,8 +98,9 @@ PowCon(mu=c(10,15,10,15,10,15,10,15,10,11),
        #if n.sub=1 the argument SubMat is ignored
        thetas=1, #inconsistency margin(s)
        alpha=0.05, #familywise type I error to be controlled
-       alternative=&quot;two.sided&quot;)#specifying the direction of the alternative hypothesis, 
-       #one of &quot;two.sided&quot;,&quot;less&quot;,&quot;greater&quot;</code></pre>
+       alternative=&quot;two.sided&quot;,#specifying the direction of the alternative hypothesis, 
+       #one of &quot;two.sided&quot;,&quot;less&quot;,&quot;greater&quot;
+       type=&quot;anypair&quot;)#power definition, one of &quot;global&quot;,&quot;anypair&quot;,&quot;allpair&quot;</code></pre>
 <p>The function <code>nPowCon</code>calculates the sample size associated with simultaneous tests for the ratios of treatment differences with a user defined inconsistency margin for the assessment of treatment-by-subgroup interactions. The required size n is determined iteratively by starting with a given sample size and search until the power condition is satisfied.</p>
 <pre class="r"><code>nPowCon(min.power=0.9,#any pair power
        mu=c(10,15,10,15,10,15,10,15,10,11),#vector of cell means from the 
@@ -114,8 +115,9 @@ PowCon(mu=c(10,15,10,15,10,15,10,15,10,11),
        #if n.sub=1 the argument
        thetas=1, #inconsistency margin(s)
        alpha=0.05, #familywise type I error to be controlled
-       alternative=&quot;two.sided&quot;)##specifying the direction of the alternative hypothesis, 
-       #one of &quot;two.sided&quot;,&quot;less&quot;,&quot;greater&quot;</code></pre>
+       alternative=&quot;two.sided&quot;,##specifying the direction of the alternative hypothesis, 
+       #one of &quot;two.sided&quot;,&quot;less&quot;,&quot;greater&quot;
+       type=&quot;anypair&quot;)#power definition, one of &quot;global&quot;,&quot;anypair&quot;,&quot;allpair&quot;</code></pre>
 </div>
 <div id="qualitative-interaction" class="section level1">
 <h1><span class="header-section-number">2</span> Qualitative interaction</h1>
@@ -138,7 +140,8 @@ PowConBinom(p=MCPAN_Est$estp,
             rhs = 0, #inconsistency margin(s)
             alternative = &quot;less&quot;, #direction of the alternative hypothesis, 
             #one of &quot;two.sided&quot;,&quot;less&quot;,&quot;greater&quot;
-            alpha = 0.05)#familywise type I error to be controlled</code></pre>
+            alpha = 0.05,#familywise type I error to be controlled
+            type=&quot;anypair&quot;)#power definition, one of &quot;global&quot;,&quot;anypair&quot;,&quot;allpair&quot;</code></pre>
 </div>
 <div id="non-inferiority-analysis" class="section level1">
 <h1><span class="header-section-number">3</span> Non-inferiority analysis</h1>
@@ -151,7 +154,8 @@ PowConBinom(p=MCPAN_Est$estp,
        SubMat = &quot;Tukey&quot;,
        thetas=0.8, 
        alpha=0.05, 
-       alternative=&quot;greater&quot;)</code></pre>
+       alternative=&quot;greater&quot;,
+       type=&quot;anypair&quot;)</code></pre>
 </div>
 <div id="references" class="section level1">
 <h1><span class="header-section-number">4</span> References</h1>

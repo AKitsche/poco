@@ -1,5 +1,25 @@
-PowConBinom <- function(p, n, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean", rhs = 1, alternative = c("two.sided", "less", "greater"), alpha = 0.05){
+PowConBinom <- function(p, n, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean", rhs = 1, 
+                        alternative = c("two.sided", "less", "greater"), alpha = 0.05,
+                        type=c("anypair","allpair","global")){
+  #function to simulate random numbers from a multivariate normal distribution according to Frank Schaarschmidt in powermcpt 
+  rmvtFS <- function(n, sigma = diag(2), df = 1, delta = rep(0, nrow(sigma)), type = c("shifted", "Kshirsagar"), method = c("eigen", "svd", "chol")) {
+    if (length(delta) != nrow(sigma)) 
+      stop("delta and sigma have non-conforming size")
+    if (df == 0) 
+      return(rmvnorm(n, mean = delta, sigma = sigma, method = method))
+    type <- match.arg(type)
+    if (type == "Kshirsagar") 
+      return(rmvnorm(n, mean = delta, sigma = sigma, method = method)/sqrt(rchisq(n, df)/df))
+    if (type == "shifted") {
+      sims <- rmvnorm(n, sigma = sigma, method = method)/sqrt(rchisq(n,  df)/df)
+      return(sweep(sims, 2, delta, "+"))
+    }
+  }
   #checks
+  if(any(p > 1)  | any(p < 0)){
+    stop("all elements of p must be numeric values between 0 and 1")
+  }
+  
   if(length(n.sub) != 1 || !is.numeric(n.sub) | is.integer(n.sub)) {
     stop("n.sub must be a single integer value specifying the number of subgroups")
   }
@@ -96,7 +116,6 @@ switch(alternative,
     tau[i] <- ((CMat[i,] - Margin.vec[i]*DMat[i,])%*%p)/
       sqrt((CMat[i,] - Margin.vec[i]*DMat[i,])%*%MM%*%(CMat[i,] - Margin.vec[i]*DMat[i,]))
   }
-  #calculating beta
 #   switch(EXPR = alternative, 
 #          two.sided = {
 #            beta <- pmvnorm(lower = rep(-crit, ncomp), upper = rep(crit, ncomp), mean = tau, sigma = CorrMat.H0)}, 
@@ -105,13 +124,95 @@ switch(alternative,
 #          greater = {
 #            beta <- pmvnorm(lower = rep(-Inf, ncomp),  upper = rep(crit, ncomp), mean = tau, sigma = CorrMat.H0)})
 #   
-switch(EXPR = alternative, 
-       two.sided = {
-         beta <- pmvt(lower = rep(-crit, ncomp), upper = rep(crit, ncomp), delta = tau, df = nu, corr = CorrMat.H0)}, 
-       less = {
-         beta <- pmvt(lower = rep(crit, ncomp),  upper = rep(Inf,  ncomp), delta = tau, df = nu, corr = CorrMat.H0)}, 
-       greater = {
-         beta <- pmvt(lower = rep(-Inf, ncomp),  upper = rep(crit, ncomp), delta = tau, df = nu, corr = CorrMat.H0)})
+#calculating beta for different power definitions
+ptype <- match.arg(type)
+switch(EXPR = ptype,
+         global = {
+           switch(EXPR = alternative, 
+                  two.sided = {
+                    beta <- pmvt(lower = rep(-crit, ncomp), upper = rep(crit, ncomp), delta = tau, df = nu, corr = CorrMat.H0)
+                    whichHA <- which(tau != 0)},
+                  less = {
+                    beta <- pmvt(lower = rep(crit, ncomp),  upper = rep(Inf,  ncomp), delta = tau, df = nu, corr = CorrMat.H0)
+                    whichHA <- which(tau < 0)},
+                  greater = {
+                    beta <- pmvt(lower = rep(-Inf, ncomp),  upper = rep(crit, ncomp), delta = tau, df = nu, corr = CorrMat.H0)
+                    whichHA <- which(tau > 0)})
+         },
+         anypair = {
+           switch(EXPR = alternative,
+                  two.sided = {
+                    whichHA <- which(tau != 0)
+                    NHA <- length(whichHA)
+                    if(NHA < 1){
+                      warning("All contrasts are under their corresponding null hypothesis, any-pair power can not be calculated")
+                      beta <- 1-alpha
+                    }else{
+                      beta <- pmvt(lower = rep(-crit, NHA), upper = rep(crit, NHA), delta = tau[whichHA], df = nu, corr = CorrMat.H0[whichHA,whichHA])
+                    }
+                  },
+                  less = {
+                    whichHA <- which(tau < 0)
+                    NHA <- length(whichHA)
+                    if(NHA < 1){
+                      warning("All contrasts are under their corresponding null hypothesis, any-pair power can not be calculated")
+                      beta <- 1-alpha
+                    }else{
+                      beta <- pmvt(lower = rep(crit, NHA), upper = rep(Inf, NHA), delta = tau[whichHA], df = nu, corr = CorrMat.H0[whichHA,whichHA])
+                    }
+                  },
+                  greater = {
+                    whichHA <- which(tau > 0)
+                    NHA <- length(whichHA)
+                    if(NHA < 1){
+                      warning("All contrasts are under their corresponding null hypothesis, any-pair power can not be calculated")
+                      beta <- 1-alpha
+                    }else{
+                      beta <- pmvt(lower = rep(-Inf, NHA), upper = rep(crit, NHA), delta = tau[whichHA], df = nu, corr = CorrMat.H0[whichHA,whichHA])
+                    }
+                  })
+         },
+       allpair = (
+         switch(EXPR = alternative, 
+                two.sided = {
+                  whichHA <- which(tau != 0)
+                  NHA <- length(whichHA)
+                  if (NHA < 1) {
+                    warning("All contrasts are under the corresponding null hypotheses, all pair power can not be calculated.")
+                    beta <- 1 - alpha
+                  } else {
+                    nsim <- 10000
+                    RT <- rmvtFS(n = nsim, delta = tau[whichHA], df = nu, sigma = matrix(CorrMat.H0[whichHA, whichHA]), method = "svd")
+                    nreject <- sum(apply(RT, 1, function(x) {
+                      min(abs(x))
+                    }) > abs(crit))
+                    beta <- 1 - (nreject/nsim)
+                    simerror <- sqrt(beta * (1 - beta)/nsim)
+                    attr(beta, which = "simerror") <- simerror
+                  }
+                },
+                less = {
+                  whichHA <- which(tau < 0)
+                  NHA <- length(whichHA)
+                  if(NHA < 1){
+                    warning("All contrasts are under their corresponding null hypothesis, any-pair power can not be calculated")
+                    beta <- 1-alpha
+                  }else{
+                    beta <- beta <- 1-pmvt(lower = rep(-Inf, NHA),  upper = rep(crit,  NHA), delta = tau[whichHA], df = nu, corr = CorrMat.H0[whichHA,whichHA])}
+                },
+                greater = {
+                  whichHA <- which(tau > 0)
+                  NHA <- length(whichHA)
+                  if(NHA < 1){
+                    warning("All contrasts are under their corresponding null hypothesis, any-pair power can not be calculated")
+                    beta <- 1-alpha
+                  }else{
+                    beta <- 1-pmvt(lower = rep(crit, NHA),  upper = rep(Inf, NHA), delta = tau[whichHA], df = nu, corr = CorrMat.H0[whichHA,whichHA])
+                  }
+                })
+         )
+)
+
 
   out <- list(power = 1-beta,
               n=n,
@@ -125,7 +226,8 @@ switch(EXPR = alternative,
               alpha = alpha,
               n.sub=n.sub,
               TreatMat=TreatMat,
-              SubMat=SubMat)
+              SubMat=SubMat,
+              type=ptype)
   class(out) <- "Powerpoco"
   out
 }

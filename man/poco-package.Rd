@@ -57,5 +57,6 @@ PowConBinom(p=MCPAN_Est$estp,
             SubMat = "GrandMean",
             rhs = 0, 
             alternative = "less", 
-            alpha = 0.05)
+            alpha = 0.05,
+            type="anypair")
 }

@@ -11,7 +11,7 @@ This function calculates the sample size associated with simltaneous tests for t
 nPowConBinom(min.power, p, n.sub = 2, 
              TreatMat = "Tukey", SubMat = "GrandMean", 
              rhs = 1, alternative = c("two.sided", "less", "greater"), 
-             alpha = 0.05)
+             alpha = 0.05,type="anypair","allpair","global")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -39,6 +39,10 @@ a single character string, specifying the direction of the alternative hypothesi
   \item{alpha}{
 a single numeric value, familywise type I error to be controlled
 }
+  \item{type}{
+  a single character string, naming the type of rejection probability to be computed;  "anypair" for the rejection probability that at least one of the alternative hypothses is true, "allpair" for the probability that all elementary alternatives are rejected,
+  "global" for the global rejection probability.
+  }
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
@@ -58,9 +62,12 @@ nPowCon return a list containing the following components:
 \item{n.sub}{number of levels of the subgrouping factor}
 \item{TreatMat}{type of contrast for the treatment factor}
 \item{SubMat}{type of contrast for the subgrouping factor}
+\item{type}{power definition used}
 }
 \references{
 Kitsche A. Detecting qualitative interactions in clinical trials with binary responses. Pharmaceutical statistics (2014); early view
+
+Kitsche A. Power and sample size computations for simultaneous consistency assessment of treatment effects [manuscript in preparation]
 }
 \author{
 Andreas Kitsche
@@ -82,7 +89,8 @@ nPowConBinom(min.power=0.8,
              SubMat = "GrandMean", 
              rhs = 1, 
              alternative = "two.sided",
-             alpha = 0.05)
+             alpha = 0.05,
+             tyoe="anypair")
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

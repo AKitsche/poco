@@ -9,7 +9,8 @@ This function calculates the minimal power (any-pair power) associated with siml
 }
 \usage{
 PowCon(mu, n, sd, n.sub = 2, TreatMat = "Tukey", SubMat = "GrandMean",
-       thetas = 1, alternative = c("two.sided", "less", "greater"), alpha = 0.05)
+       thetas = 1, alternative = c("two.sided", "less", "greater"), alpha = 0.05,
+       type="anypair","allpair","global")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -40,6 +41,10 @@ a single character string, specifying the direction of the alternative hypothesi
   \item{alpha}{
 a single numeric value, familywise type I error to be controlled
 }
+  \item{type}{
+  a single character string, naming the type of rejection probability to be computed;  "anypair" for the rejection probability that at least one of the alternative hypothses is true, "allpair" for the probability that all elementary alternatives are rejected,
+  "global" for the global rejection probability.
+  }
 }
 \details{
 %%  ~~ If necessary, more details than the description above ~~
@@ -59,9 +64,12 @@ PowCon return a list containing the following components:
 \item{n.sub}{number of levels of the subgrouping factor}
 \item{TreatMat}{type of contrast for the treatment factor}
 \item{SubMat}{type of contrast for the subgrouping factor}
+\item{type}{power definition used}
 }
 \references{
 Kitsche, A., Hothorn, L.A. Testing for qualitative interaction using ratios of treatment differences. Statistics in Medicine 2014; 13(9):1477-1489.
+
+Kitsche, A. Power and sample size computations for simultaneous consistency assessment of treatment effects [manuscript in preparation]
 }
 \author{
 Andreas Kitsche
@@ -86,7 +94,8 @@ PowCon(mu = c(10,8,10,12,10,12,10,12,10,12,10,12,10,12,10,12,10,12,10,12),
        SubMat="GrandMean",
        thetas=0,
        alternative="less",
-       alpha=0.05)
+       alpha=0.05,
+       type="anypair")
        
 #analysis of the consistency in a reproduced pivotal study
 PowCon(mu=c(10,15,10,14), 
@@ -97,7 +106,8 @@ PowCon(mu=c(10,15,10,14),
        SubMat = "Tukey",
        thetas=0.5, 
        alpha=0.05, 
-       alternative="greater")
+       alternative="greater",
+       type="anypair")
        
 #analysis of treatment-by-subgroup interaction (e.g. in a multi-regional trial)
 PowCon(mu=c(10,15,10,15,10,15,10,15,10,11), 
@@ -108,7 +118,8 @@ PowCon(mu=c(10,15,10,15,10,15,10,15,10,11),
        SubMat = "GrandMean",
        thetas=1, 
        alpha=0.05, 
-       alternative="two.sided")
+       alternative="two.sided",
+       type="anypair")
        
 #if n.sub=1 and TreatMat="Dunnett" the method corresponds to:
 #Dilba, G., Bretz, F., Hothorn, L.A., Guiard, V.
@@ -122,7 +133,8 @@ PowCon(mu=c(10,9,9,11),
        SubMat = "Tukey",
        thetas=0.8, 
        alpha=0.05, 
-       alternative="greater")
+       alternative="greater",
+       type="anypair")
 
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

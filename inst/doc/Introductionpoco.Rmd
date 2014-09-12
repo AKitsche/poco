@@ -26,7 +26,7 @@ In this package provides power and sample size calculations for the analysis of 
 The function `PowCon` calculates the minimal power (any-pair power) associated with simultaneous tests for the ratios of treatment differences with a user defined inconsistency margin for the assessment of treatment-by-subgroup interactions.
 
 ```{r, cache=TRUE, echo=TRUE, eval=FALSE, tidy=TRUE}
-library(poco)
+#library(poco)
 PowCon(mu=c(10,15,10,15,10,15,10,15,10,11), 
        #vector of cell means from the cell 
        #mu = means model corresponding to a two-way layout
@@ -46,8 +46,9 @@ PowCon(mu=c(10,15,10,15,10,15,10,15,10,11),
        #if n.sub=1 the argument SubMat is ignored
        thetas=1, #inconsistency margin(s)
        alpha=0.05, #familywise type I error to be controlled
-       alternative="two.sided")#specifying the direction of the alternative hypothesis, 
+       alternative="two.sided",#specifying the direction of the alternative hypothesis, 
        #one of "two.sided","less","greater"
+       type="anypair")#power definition, one of "global","anypair","allpair"
 ```
 
 The function `nPowCon`calculates the sample size associated with simultaneous tests for the ratios of treatment differences with a user defined inconsistency margin for the assessment of treatment-by-subgroup interactions. The required size n is determined iteratively by starting with a given sample size and search until the power condition is satisfied.
@@ -66,8 +67,9 @@ nPowCon(min.power=0.9,#any pair power
        #if n.sub=1 the argument
        thetas=1, #inconsistency margin(s)
        alpha=0.05, #familywise type I error to be controlled
-       alternative="two.sided")##specifying the direction of the alternative hypothesis, 
+       alternative="two.sided",##specifying the direction of the alternative hypothesis, 
        #one of "two.sided","less","greater"
+       type="anypair")#power definition, one of "global","anypair","allpair"
 ```
 
 #Qualitative interaction
@@ -92,7 +94,8 @@ PowConBinom(p=MCPAN_Est$estp,
             rhs = 0, #inconsistency margin(s)
             alternative = "less", #direction of the alternative hypothesis, 
             #one of "two.sided","less","greater"
-            alpha = 0.05)#familywise type I error to be controlled
+            alpha = 0.05,#familywise type I error to be controlled
+            type="anypair")#power definition, one of "global","anypair","allpair"
 ```
 
 
@@ -108,7 +111,8 @@ PowCon(mu=c(10,9,9,11),
        SubMat = "Tukey",
        thetas=0.8, 
        alpha=0.05, 
-       alternative="greater")
+       alternative="greater",
+       type="anypair")
 ```
 
 
