@@ -1,4 +1,4 @@
-nPowCon <- function(min.power, mu, sd, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean", thetas = 1, alternative = c("two.sided", "less", "greater"), alpha = 0.05){
+nPowCon <- function(min.power, mu, sd, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean", thetas = 1, alternative = c("two.sided", "less", "greater"), alpha = 0.05, type=c("anypair","allpair","global")){
   
   if(length(min.power) != 1 || !is.numeric(min.power) | min.power <= 0 | min.power >= 1) {
     stop("min.power must be a single numeric value between 0 and 1")
@@ -14,7 +14,8 @@ nPowCon <- function(min.power, mu, sd, n.sub=2, TreatMat = "Tukey", SubMat = "Gr
            SubMat = SubMat,
            thetas=thetas, 
            alpha=alpha, 
-           alternative=alternative)[[1]]-min.power
+           alternative=alternative,
+           type=type)[[1]]-min.power
   }
   nfinal <- as.integer(uniroot(samplesize, lower=2, upper=10000)$root)
   Power <-    PowCon(mu=mu, 
@@ -25,7 +26,8 @@ nPowCon <- function(min.power, mu, sd, n.sub=2, TreatMat = "Tukey", SubMat = "Gr
                      SubMat = SubMat,
                      thetas=thetas, 
                      alpha=alpha, 
-                     alternative=alternative) 
+                     alternative=alternative,
+                     type=type) 
   out <- list(power = Power[[1]],
               n=nfinal,
               NonCentrPar=Power[[3]], 
@@ -38,7 +40,8 @@ nPowCon <- function(min.power, mu, sd, n.sub=2, TreatMat = "Tukey", SubMat = "Gr
               alpha = Power[[10]],
               n.sub=Power[[11]],
               TreatMat=Power[[12]],
-              SubMat=Power[[13]])
+              SubMat=Power[[13]],
+              type=Power[[14]])
   class(out) <- "Powerpoco"
   out
 }
