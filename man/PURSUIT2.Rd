@@ -11,10 +11,10 @@ The study was an international multi-center double-blind  #randomized placebo-co
 \format{
   A data frame with 9461 observations on the following 4 variables.
   \describe{
-    \item{\code{Region}}{a factor with levels \code{EE}, \code{LA}, \code{WE}, \code{NA}, determing the region: EE - Eastern Europe, LA - Latin America, WE - Western Europe, NA - North America}
+    \item{\code{Region}}{a factor with levels \code{EE}, \code{LA}, \code{WE}, \code{NAm}, determing the region: EE - Eastern Europe, LA - Latin America, WE - Western Europe, NA - North America}
     \item{\code{Treat}}{a factor with levels \code{High} \code{Placebo}, determining the treatment group}
     \item{\code{X}}{a numeric vector, indicating the binary response variable}
-    \item{\code{RegionTreat}}{a factor with levels \code{EE:High} \code{EE:Placebo} \code{LA:High} \code{LA:Placebo} \code{NA:High} \code{NA:Placebo} \code{WE:High} \code{WE:Placebo}}
+    \item{\code{RegionTreat}}{a factor with levels \code{EE:High} \code{EE:Placebo} \code{LA:High} \code{LA:Placebo} \code{NAm:High} \code{NAm:Placebo} \code{WE:High} \code{WE:Placebo}}
   }
 }
 \details{
@@ -28,6 +28,22 @@ The PURSUIT Trial Investigators. Inhibition of platelet glycoprotein IIb/IIIa wi
 }
 \examples{
 data(PURSUIT2)
-## maybe str(PURSUIT2) ; plot(PURSUIT2) ...
+library(MCPAN)
+MCPAN_Est <- binomest(X ~ RegionTreat,
+                      data=PURSUIT2, 
+                      success="1", 
+                      method="Wald")
+MCPAN_Est$estp
+MCPAN_Est$n
+#power calculations
+PowConBinom(p=MCPAN_Est$estp, 
+            n=MCPAN_Est$n, 
+            n.sub = 4, 
+            TreatMat = "Tukey", 
+            SubMat = "GrandMean",
+            rhs = 0.5, 
+            alternative = "less", 
+            alpha = 0.05,
+            type="anypair")
 }
 \keyword{datasets}

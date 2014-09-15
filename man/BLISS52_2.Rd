@@ -29,6 +29,23 @@ Efficacy and safety of belimumab in patients with active systemic lupus erythema
 }
 \examples{
 data(BLISS52_2)
-## maybe str(BLISS52_2) ; plot(BLISS52_2) ...
+BLISS52_2$Treatment <- factor(BLISS52_2$Treatment, levels=c("Placebo", "1mg", "10mg"))
+library(MCPAN)
+MCPAN_Est <- binomest(Success ~ RegionTreat,
+                      data=BLISS52_2, 
+                      success="1", 
+                      method="Wald")
+MCPAN_Est$estp
+MCPAN_Est$n
+#power calculations
+PowConBinom(p=MCPAN_Est$estp, 
+            n=MCPAN_Est$n, 
+            n.sub = 3, 
+            TreatMat = "Dunnett", 
+            SubMat = "GrandMean",
+            rhs = 0.5, 
+            alternative = "less", 
+            alpha = 0.05,
+            type="anypair")
 }
 \keyword{datasets}
