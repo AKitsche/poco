@@ -1,7 +1,7 @@
 Package: poco
 Type: Package
 Title: R Functions for Sample Size and Probability Calculations for the assessment of consistency in multi-regional trials
-Version: 1.0
+Version: 1.2
 Date: 2014-09-12
 Author: Andreas Kitsche
 Maintainer: Andreas Kitsche <kitsche@biostat.uni-hannover.de>

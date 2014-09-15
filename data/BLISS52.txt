@@ -1,0 +1,10 @@
+"Region" "Treatment" "SampleSize" "Events"
+"1" "AsiaPacific" "1mg" 111 42
+"2" "AsiaPacific" "10mg" 119 59
+"3" "AsiaPacific" "Placebo" 109 42
+"4" "LatinAmerica" "1mg" 143 85
+"5" "LatinAmerica" "10mg" 140 85
+"6" "LatinAmerica" "Placebo" 145 71
+"7" "EasternEurope" "1mg" 34 21
+"8" "EasternEurope" "10mg" 31 23
+"9" "EasternEurope" "Placebo" 33 12

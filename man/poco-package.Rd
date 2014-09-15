@@ -21,7 +21,7 @@ In this package provides power and sample size calculations for the analysis of 
 \tabular{ll}{
 Package: \tab poco\cr
 Type: \tab Package\cr
-Version: \tab 1.0\cr
+Version: \tab 1.2\cr
 Date: \tab 2014-08-28\cr
 License: \tab GPL\cr
 }
