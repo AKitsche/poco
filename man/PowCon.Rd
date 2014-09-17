@@ -42,8 +42,7 @@ a single character string, specifying the direction of the alternative hypothesi
 a single numeric value, familywise type I error to be controlled
 }
   \item{type}{
-  a single character string, naming the type of rejection probability to be computed;  "anypair" for the rejection probability that at least one of the alternative hypothses is true, "allpair" for the probability that all elementary alternatives are rejected,
-  "global" for the global rejection probability.
+  a single character string, naming the type of rejection probability to be computed;  "anypair" for the rejection probability that at least one of the alternative hypothses is true, "allpair" for the probability that all elementary alternatives are rejected, "global" for the global rejection probability.
   }
 }
 \details{
