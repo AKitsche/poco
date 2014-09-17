@@ -1,3 +1,6 @@
+---
+output: pdf_document
+---
 --- 
 title: "Power and sample size calculations for interaction analysis"
 output:
@@ -12,7 +15,7 @@ output:
 %\VignetteIndexEntry{Power and sample size calculations for interaction analysis}
 -->
 
-In this package provides power and sample size calculations for the analysis of treatment-by-subgroup interactions are proposed. Therefore, the interaction effect is either defined via [product-type interaction contrasts][producttypeinteraction] [1,2] or as [ratio of treatment differences][ratiosquantitative] [3]. The latter formulation allows besides the detection of interactions also the assessment of the consistency/heterogeneity of the subgroup-specific treatment effect by the definition of an inconsistency margin. he methodology is applicable in trials with a [continuous][ratiosquantitative] as well as a [binary endpoint][ratiosbinary].
+In this package power and sample size calculations for the analysis of treatment-by-subgroup interactions are proposed. Therefore, the interaction effect is either defined via [product-type interaction contrasts][producttypeinteraction] [1,2] or as [ratio of treatment differences][ratiosquantitative] [3]. The latter formulation allows besides the detection of interactions also the assessment of the consistency/heterogeneity of the subgroup-specific treatment effect by the definition of an inconsistency margin. he methodology is applicable in trials with a [continuous][ratiosquantitative] as well as a [binary endpoint][ratiosbinary].
 
 * calculate the power to detect an interaction effect 
 
