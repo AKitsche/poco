@@ -89,12 +89,12 @@ PowCon <- function(mu, n, sd, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
   }
   #Definition of numerator and denominator product type interaction contrast matrices for the M ratios 
   if(n.sub==1){
-    CMat <- contrMatRatio(n=rep(n, n.treat), type = TreatMat)$numC
-    DMat <- contrMatRatio(n=rep(n, n.treat), type = TreatMat)$denC
+      CMat <- contrMatRatio(n=nTreat, type = TreatMat)$numC
+      DMat <- contrMatRatio(n=nTreat, type = TreatMat)$denC
   }else{
-    C_Treat <- contrMat(n=rep(n, n.treat), type=TreatMat)#definition of the treatment effect as the user defined difference of treatment groups
-    C_Subgroup_Numerator   <- contrMatRatio(n=rep(n, n.subgroup), type = SubMat)$numC
-    C_Subgroup_Denominator <- contrMatRatio(n=rep(n, n.subgroup), type = SubMat)$denC
+    C_Treat <- contrMat(n=nTreat, type=TreatMat)#definition of the treatment effect as the user defined difference of treatment groups
+    C_Subgroup_Numerator   <- contrMatRatio(n=nSub, type = SubMat)$numC
+    C_Subgroup_Denominator <- contrMatRatio(n=nSub, type = SubMat)$denC
     CMat <- kronecker(C_Subgroup_Numerator, C_Treat)#numerator interaction contrast matrix
     DMat <- kronecker(C_Subgroup_Denominator, C_Treat)#denominator interaction contrast matrix
   }
@@ -109,10 +109,18 @@ PowCon <- function(mu, n, sd, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
   }
   
   
-  
-  MM <- diag(1/rep(n, ncol(CMat)))# Diagonal matrix containing reciprocals of the ni's
+  if(length(n)==1){
+    MM <- diag(1/rep(n, ncol(CMat)))# Diagonal matrix containing reciprocals of the ni's
+  }else{
+    MM <- diag(1/n)
+  }  
   ncomp <- nrow(CMat)#Number of comparisons 
-  nu <- (length(mu))*(n-1)#degree of freedom
+  if(length(n)==1){
+    nu <- (length(mu))*(n-1)#degree of freedom
+  }else{
+    nu <- sum(n-1)
+  }
+  
   #  Correlation matrix under H0
   CorrMat.H0 <- matrix(rep(NA,ncomp*ncomp),nrow=ncomp)
   for(i in 1:ncomp) {
@@ -134,8 +142,14 @@ PowCon <- function(mu, n, sd, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
   )
   #Calculating the non-centrality parameter vector tau
   tau <- vector(length=ncomp)
-  for(i in 1:ncomp){
-    tau[i] <- ((t(mu)%*%CMat[i,]) - (Margin.vec[i]*t(mu)%*%DMat[i,]))/(sd*sqrt((1+Margin.vec[i]^2)/n))}
+  if(length(n)==1){
+    for(i in 1:ncomp){
+      tau[i] <- ((t(mu)%*%CMat[i,]) - (Margin.vec[i]*t(mu)%*%DMat[i,]))/(sd*sqrt((1+Margin.vec[i]^2)/n))}
+  }else{
+    for(i in 1:ncomp){
+      tau[i] <- ((t(mu)%*%CMat[i,]) - (Margin.vec[i]*t(mu)%*%DMat[i,]))/(sd*sqrt((1+Margin.vec[i]^2)/nSub[i]))}
+  }
+  
   #calculating beta for different power definitions
   ptype <- match.arg(type)
   switch(EXPR = ptype, 

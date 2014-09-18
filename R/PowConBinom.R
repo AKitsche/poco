@@ -24,7 +24,7 @@ PowConBinom <- function(p, n, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
     stop("n.sub must be a single integer value specifying the number of subgroups")
   }
   if(length(n) != length(p) & length(n) != 1) {
-    stop("n must be of the sample length as p, correponding to the sample size for each treatment-by-subgroup combination")
+    stop("n must be of the same length as p, correponding to the sample size for each treatment-by-subgroup combination")
   }
   if(length(p) < 2 || !(is.numeric(p) | is.integer(p))) {
     stop("p must be a vector of expected proportions (at least length 2, containing integer values)")

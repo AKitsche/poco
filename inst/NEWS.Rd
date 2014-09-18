@@ -1,17 +1,32 @@
 \newcommand{\PR}{\Sexpr[results=rd]{tools:::Rd_expr_PR(#1)}}
 
 \name{NEWS}
-\title{poco News}
+\title{News in package poco}
 \encoding{UTF-8}
-\section{CHANGES IN VERSION 1.2}{
+\section{CHANGES IN VERSION 1.2.1}{
     \itemize{
-      \item \code{PURSUIT} new data set fro ma multi regional clinical trial added added to the package
+      \item Bug fixes in function \code{PowCon}
+    }
+}
+
+\section{CHANGES IN VERSION 1.2.0}{
+    \itemize{
+      \item \code{PURSUIT} new data set from a multi regional clinical trial added to the package
       \item \code{BLISS} and \code{BLISS2} new data set from a multi regional clnical trial with three treatment groups added
   }}
   
-\section{CHANGES IN VERSION 1.1}{
+\section{CHANGES IN VERSION 1.1.0}{
     \itemize{
-      \item option \code{type} added to the function \code{PowCon}, \code{nPowCon}, \code{PowConBinom} and \code{nPowConBinom} with arguments \code{anypair}, \code{allpair} and \code{global}
+      \item option \code{type} added to the functions \code{PowCon}, \code{nPowCon}, \code{PowConBinom} and \code{nPowConBinom} with arguments \code{anypair}, \code{allpair} and \code{global}
   }}
   
+\section{CHANGES IN VERSION 1.0.0}{
+\itemize{
+ \item calculate the power to detect an interaction effect (also qualitative interactions)
+\item calculate sample size to detect an interaction effect (also qualitative interactions)
+\item calculate power for consistency assessment
+\item calculate sample size for consistency assessment
+}
+}
+
 
