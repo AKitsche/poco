@@ -6,6 +6,7 @@
 \section{CHANGES IN VERSION 1.2.1}{
     \itemize{
       \item Bug fixes in function \code{PowCon}
+      \item \code{Depression} new data set from a multi-centre clinical trials added
     }
 }
 
