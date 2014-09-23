@@ -61,10 +61,11 @@ PowConBinom <- function(p, n, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
     DMat <- contrMatRatio(n=nTreat, type = TreatMat)$denC
   }else{
     C_Treat <- contrMat(n=nTreat, type=TreatMat)#definition of the treatment effect as the user defined difference of treatment groups
-    C_Subgroup_Numerator   <- contrMatRatio(n=nSub, type = SubMat)$numC
-    C_Subgroup_Denominator <- contrMatRatio(n=nSub, type = SubMat)$denC
-    CMat <- kronecker(C_Subgroup_Numerator, C_Treat)#numerator interaction contrast matrix
-    DMat <- kronecker(C_Subgroup_Denominator, C_Treat)#denominator interaction contrast matrix
+    C_Subgroup_Numerator1   <- contrMatRatio(n=nSub, type = SubMat)$numC
+    C_Subgroup_Denominator1   <- contrMatRatio(n=nSub, type = SubMat)$denC
+    C_Subgroup_Denominator2 <- contrMatRatio(n=n, type = SubMat)$denC#contrMatRatio(n=n, type = SubMat)$denC
+    CMat <- kronecker(C_Subgroup_Numerator1, C_Treat)#numerator interaction contrast matrix
+    DMat <- t(C_Subgroup_Denominator2[1,]*t(kronecker(matrix(rep(1,length(nSub)*nrow(C_Subgroup_Numerator1)),nrow=nrow(C_Subgroup_Numerator1)),C_Treat)))#denominator interaction contrast matrix
   }
   if(length(rhs) != 1 & length(rhs) != nrow(CMat)) {
     stop("rhs must either be a single numeric value or a numeric vector which length is equal to the number of comparions")
@@ -76,7 +77,7 @@ PowConBinom <- function(p, n, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
     Margin.vec <- rhs
   }
   
-
+  
   
   #MM <- diag(1/rep(n, ncol(CMat)))# Diagonal matrix containing reciprocals of the ni's
   variances <- (p*(1-p))/n
@@ -94,21 +95,21 @@ PowConBinom <- function(p, n, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
   }
   #Calculating the critical value under H0
   alternative <- match.arg(alternative)
-#   switch(alternative, 
-#          two.sided = {
-#            crit <- qmvnorm(p = 1 - alpha, tail = "both.tails", sigma = CorrMat.H0)[["quantile"]]},         less = {
-#            crit <- qmvnorm(p= 1-alpha, tail="upper", sigma = CorrMat.H0)[["quantile"]]}, 
-#          greater = {
-#            crit <- qmvnorm(p = 1 - alpha, tail = "lower", sigma = CorrMat.H0)[["quantile"]]}
-#   )
-switch(alternative, 
-       two.sided = {
-         crit <- qmvt(p = 1 - alpha, tail = "both.tails", df = nu, corr = CorrMat.H0)[["quantile"]]},
-       less = {
-         crit <- qmvt(p= 1-alpha, tail="upper", df=nu, corr=CorrMat.H0)[["quantile"]]}, 
-       greater = {
-         crit <- qmvt(p = 1 - alpha, tail = "lower", df = nu, corr = CorrMat.H0)[["quantile"]]}
-)
+  #   switch(alternative, 
+  #          two.sided = {
+  #            crit <- qmvnorm(p = 1 - alpha, tail = "both.tails", sigma = CorrMat.H0)[["quantile"]]},         less = {
+  #            crit <- qmvnorm(p= 1-alpha, tail="upper", sigma = CorrMat.H0)[["quantile"]]}, 
+  #          greater = {
+  #            crit <- qmvnorm(p = 1 - alpha, tail = "lower", sigma = CorrMat.H0)[["quantile"]]}
+  #   )
+  switch(alternative, 
+         two.sided = {
+           crit <- qmvt(p = 1 - alpha, tail = "both.tails", df = nu, corr = CorrMat.H0)[["quantile"]]},
+         less = {
+           crit <- qmvt(p= 1-alpha, tail="upper", df=nu, corr=CorrMat.H0)[["quantile"]]}, 
+         greater = {
+           crit <- qmvt(p = 1 - alpha, tail = "lower", df = nu, corr = CorrMat.H0)[["quantile"]]}
+  )
   #Calculating the non-centrality parameter vector tau
   tau <- vector(length=ncomp)
   for (i in 1:ncomp){
@@ -116,17 +117,17 @@ switch(alternative,
     tau[i] <- ((CMat[i,] - Margin.vec[i]*DMat[i,])%*%p)/
       sqrt((CMat[i,] - Margin.vec[i]*DMat[i,])%*%MM%*%(CMat[i,] - Margin.vec[i]*DMat[i,]))
   }
-#   switch(EXPR = alternative, 
-#          two.sided = {
-#            beta <- pmvnorm(lower = rep(-crit, ncomp), upper = rep(crit, ncomp), mean = tau, sigma = CorrMat.H0)}, 
-#          less = {
-#            beta <- pmvnorm(lower = rep(crit, ncomp),  upper = rep(Inf,  ncomp), mean = tau, sigma = CorrMat.H0)}, 
-#          greater = {
-#            beta <- pmvnorm(lower = rep(-Inf, ncomp),  upper = rep(crit, ncomp), mean = tau, sigma = CorrMat.H0)})
-#   
-#calculating beta for different power definitions
-ptype <- match.arg(type)
-switch(EXPR = ptype,
+  #   switch(EXPR = alternative, 
+  #          two.sided = {
+  #            beta <- pmvnorm(lower = rep(-crit, ncomp), upper = rep(crit, ncomp), mean = tau, sigma = CorrMat.H0)}, 
+  #          less = {
+  #            beta <- pmvnorm(lower = rep(crit, ncomp),  upper = rep(Inf,  ncomp), mean = tau, sigma = CorrMat.H0)}, 
+  #          greater = {
+  #            beta <- pmvnorm(lower = rep(-Inf, ncomp),  upper = rep(crit, ncomp), mean = tau, sigma = CorrMat.H0)})
+  #   
+  #calculating beta for different power definitions
+  ptype <- match.arg(type)
+  switch(EXPR = ptype,
          global = {
            switch(EXPR = alternative, 
                   two.sided = {
@@ -172,48 +173,48 @@ switch(EXPR = ptype,
                     }
                   })
          },
-       allpair = (
-         switch(EXPR = alternative, 
-                two.sided = {
-                  whichHA <- which(tau != 0)
-                  NHA <- length(whichHA)
-                  if (NHA < 1) {
-                    warning("All contrasts are under the corresponding null hypotheses, all pair power can not be calculated.")
-                    beta <- 1 - alpha
-                  } else {
-                    nsim <- 10000
-                    RT <- rmvtFS(n = nsim, delta = tau[whichHA], df = nu, sigma = matrix(CorrMat.H0[whichHA, whichHA]), method = "svd")
-                    nreject <- sum(apply(RT, 1, function(x) {
-                      min(abs(x))
-                    }) > abs(crit))
-                    beta <- 1 - (nreject/nsim)
-                    simerror <- sqrt(beta * (1 - beta)/nsim)
-                    attr(beta, which = "simerror") <- simerror
-                  }
-                },
-                less = {
-                  whichHA <- which(tau < 0)
-                  NHA <- length(whichHA)
-                  if(NHA < 1){
-                    warning("All contrasts are under their corresponding null hypothesis, any-pair power can not be calculated")
-                    beta <- 1-alpha
-                  }else{
-                    beta <- beta <- 1-pmvt(lower = rep(-Inf, NHA),  upper = rep(crit,  NHA), delta = tau[whichHA], df = nu, corr = CorrMat.H0[whichHA,whichHA])}
-                },
-                greater = {
-                  whichHA <- which(tau > 0)
-                  NHA <- length(whichHA)
-                  if(NHA < 1){
-                    warning("All contrasts are under their corresponding null hypothesis, any-pair power can not be calculated")
-                    beta <- 1-alpha
-                  }else{
-                    beta <- 1-pmvt(lower = rep(crit, NHA),  upper = rep(Inf, NHA), delta = tau[whichHA], df = nu, corr = CorrMat.H0[whichHA,whichHA])
-                  }
-                })
+         allpair = (
+           switch(EXPR = alternative, 
+                  two.sided = {
+                    whichHA <- which(tau != 0)
+                    NHA <- length(whichHA)
+                    if (NHA < 1) {
+                      warning("All contrasts are under the corresponding null hypotheses, all pair power can not be calculated.")
+                      beta <- 1 - alpha
+                    } else {
+                      nsim <- 10000
+                      RT <- rmvtFS(n = nsim, delta = tau[whichHA], df = nu, sigma = matrix(CorrMat.H0[whichHA, whichHA]), method = "svd")
+                      nreject <- sum(apply(RT, 1, function(x) {
+                        min(abs(x))
+                      }) > abs(crit))
+                      beta <- 1 - (nreject/nsim)
+                      simerror <- sqrt(beta * (1 - beta)/nsim)
+                      attr(beta, which = "simerror") <- simerror
+                    }
+                  },
+                  less = {
+                    whichHA <- which(tau < 0)
+                    NHA <- length(whichHA)
+                    if(NHA < 1){
+                      warning("All contrasts are under their corresponding null hypothesis, any-pair power can not be calculated")
+                      beta <- 1-alpha
+                    }else{
+                      beta <- beta <- 1-pmvt(lower = rep(-Inf, NHA),  upper = rep(crit,  NHA), delta = tau[whichHA], df = nu, corr = CorrMat.H0[whichHA,whichHA])}
+                  },
+                  greater = {
+                    whichHA <- which(tau > 0)
+                    NHA <- length(whichHA)
+                    if(NHA < 1){
+                      warning("All contrasts are under their corresponding null hypothesis, any-pair power can not be calculated")
+                      beta <- 1-alpha
+                    }else{
+                      beta <- 1-pmvt(lower = rep(crit, NHA),  upper = rep(Inf, NHA), delta = tau[whichHA], df = nu, corr = CorrMat.H0[whichHA,whichHA])
+                    }
+                  })
          )
-)
-
-
+  )
+  
+  
   out <- list(power = 1-beta,
               n=n,
               NonCentrPar=tau, 

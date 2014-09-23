@@ -29,6 +29,28 @@ Kitsche, A. Power and sample size computations for simultaneous consistency asse
 }
 \examples{
 data(Depression)
-## maybe str(Depression) ; plot(Depression) ...
+#define Centre variable as factor 
+Depression$Centre <- factor(Depression$Centre)
+#reorder levels of Group variable
+Depression$Group <- factor(Depression$Group, levels=c("P","D"))
+#define treatment-by-centre factor variable
+Depression$TreatCentre <- with(Depression, Centre:Group)
+#calculating the cell means
+Means <- aggregate(Score ~ TreatCentre, data=Depression, FUN=mean)$Score
+#calculating the common variance
+Var   <- aggregate(Score ~ 1, data=Depression, FUN=var)$Score
+#calculating the cell sample sizes
+N     <- aggregate(Score ~ TreatCentre, data=Depression, FUN=length)$Score
+#calculating any-pair power to detect a qualitative interaction
+PowCon(mu = Means,
+       n=N,
+       sd=sqrt(Var),
+       n.sub=5,
+       TreatMat="Tukey",
+       SubMat="GrandMean",
+       thetas=0,
+       alternative="less",
+       alpha=0.05,
+       type="anypair")
 }
 \keyword{datasets}

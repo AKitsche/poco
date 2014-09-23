@@ -27,6 +27,6 @@ Data set with the number of successes and failures for each region in the Metopr
 MERIT-HF Study Group. Effect of metoprolol CR/XL in chronic heart failure: Metoprolol CR/XL Randomised Intervention Trial In-congestive Heart Failure (MERIT-HF). Lancet (1999); 353(9169):2001-2007.
 }
 \examples{
-
+data(MetoCRXL)
 }
 \keyword{datasets}

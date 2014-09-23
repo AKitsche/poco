@@ -72,11 +72,11 @@ PowCon <- function(mu, n, sd, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
     nSub   <- rep(n, n.subgroup)
   }else{
     nTreat <- vector(length=n.treat)#sample size for each treatment group
-    IteratorTreat <- seq(1,length(mu), by=n.subgroup)
-    IteratorTreat <- c(IteratorTreat,length(mu)+1)
+    IteratorTreat <- seq(1,length(mu), by=n.treat)
+    #IteratorTreat <- c(IteratorTreat,length(p)+1)
     for(i in 1:n.treat){
-      k <- IteratorTreat[i]
-      nTreat[i] <- sum(n[k:(IteratorTreat[i+1]-1)])
+      #k <- IteratorTreat[i]
+      nTreat[i] <- sum(n[IteratorTreat+i-1])
     }
     
     nSub   <- vector(length=n.sub)#sample size for each subgroup
@@ -87,6 +87,7 @@ PowCon <- function(mu, n, sd, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
       nSub[i] <- sum(n[k:(IteratorSub[i+1]-1)]) 
     }    
   }
+  
   #Definition of numerator and denominator product type interaction contrast matrices for the M ratios 
   if(n.sub==1){
       CMat <- contrMatRatio(n=nTreat, type = TreatMat)$numC
