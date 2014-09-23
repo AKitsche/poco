@@ -60,11 +60,31 @@ PowConBinom <- function(p, n, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
     CMat <- contrMatRatio(n=nTreat, type = TreatMat)$numC
     DMat <- contrMatRatio(n=nTreat, type = TreatMat)$denC
   }else{
+    #Definition of numerator and denominator product type interaction contrast matrices for the M ratios 
     C_Treat <- contrMat(n=nTreat, type=TreatMat)#definition of the treatment effect as the user defined difference of treatment groups
     C_Subgroup_Numerator   <- contrMatRatio(n=nSub, type = SubMat)$numC
-    C_Subgroup_Denominator <- contrMatRatio(n=nSub, type = SubMat)$denC
     CMat <- kronecker(C_Subgroup_Numerator, C_Treat)#numerator interaction contrast matrix
-    DMat <- kronecker(C_Subgroup_Denominator, C_Treat)#denominator interaction contrast matrix
+    #denominator contrast matrix
+    #identification of required sample sizes to defines DMat for each contrast of C_Treat
+    IDn <- matrix(rep(C_Treat, times=n.subgroup), nrow=nrow(C_Treat))
+    #IDn - ID matrix to define the required sample sizes
+    N <- matrix(rep(0, ncol(CMat)*nrow(C_Treat)), nrow=nrow(C_Treat))
+    #N - matrix of sample sizes required for the denominator matrix for each contrast in C_Treat
+    for(i in 1:nrow(C_Treat)){
+      N[i,which(IDn[i,]!=0)] <- n[which(IDn[i,]!=0)]
+    }
+    #summarize the sample sizes according to the subgrouping factor
+    Nsum   <- rep(NA, times=nrow(C_Treat)*n.sub)
+    ID_Sub <- seq(1,length(N)+1, by=n.treat)#identifies the starting value for each subgrouping sample size in N
+    for(i in 1:length(Nsum)){
+      Nsum[i] <- sum(t(N)[seq(ID_Sub[i],ID_Sub[i+1]-1)])
+    }
+    NSub <- matrix(Nsum, nrow=nrow(C_Treat),byrow=TRUE)
+    C_Subgroup_Denominator   <- matrix(rep(0,length(IDn)),nrow=nrow(C_Treat))
+    for(i in 1:nrow(C_Treat)){
+      C_Subgroup_Denominator[i,] <- kronecker(contrMatRatio(n=NSub[i,], type = SubMat)$denC[1,],C_Treat[i,])
+    }
+    DMat <- kronecker(rep(1,nrow(C_Subgroup_Numerator)), C_Subgroup_Denominator)
   }
   if(length(rhs) != 1 & length(rhs) != nrow(CMat)) {
     stop("rhs must either be a single numeric value or a numeric vector which length is equal to the number of comparions")
