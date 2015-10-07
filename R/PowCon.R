@@ -103,6 +103,9 @@ PowCon <- function(mu, n, sd, n.sub=2, TreatMat = "Tukey", SubMat = "GrandMean",
     #IDn - ID matrix to define the required sample sizes
     N <- matrix(rep(0, ncol(CMat)*nrow(C_Treat)), nrow=nrow(C_Treat))
     #N - matrix of sample sizes required for the denominator matrix for each contrast in C_Treat
+        if(length(n) == 1){
+      n <- rep(n, length(mu))
+        }
     for(i in 1:nrow(C_Treat)){
       N[i,which(IDn[i,]!=0)] <- n[which(IDn[i,]!=0)]
     }
